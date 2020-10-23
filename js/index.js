@@ -41,3 +41,29 @@ document.body.addEventListener('click', event => {
         formEditStudent.elements.id.value = studentId;
     });
 });
+
+document.querySelector('#form-edit-student button[type="submit"]').addEventListener('click', function(event) {
+    const data = {
+        'firstname': formEditStudent.elements.firstname.value,
+        'lastname': formEditStudent.elements.lastname.value,
+        'email': formEditStudent.elements.email.value,
+        'git': formEditStudent.elements.git.value,
+        'info': formEditStudent.elements.info.value
+    };
+    // console.log(data);
+
+    const id = formEditStudent.elements.id.value;
+
+    api.updateStudentById(id, data).then(response => {
+        const element = document.querySelector(`#students-list [data-id="` + id +`"]`);
+
+        element.innerText = `${response.firstname} ${response.lastname}`;
+    }).catch(error => {
+        console.error(error)
+    });
+
+
+
+
+    
+});
