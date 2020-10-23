@@ -65,7 +65,7 @@ document.querySelector('#form-edit-student button[type="submit"]').addEventListe
    
 });
 
-document.querySelector('#form-add-student button[type="submit"]').addEventListener('click', function(event) {
+document.querySelector('#form-add-student button[type="submit"]').addEventListener('click', () => {
     const formAddStudent = document.querySelector('#form-add-student');
     const { elements } = formAddStudent;
 
@@ -78,12 +78,62 @@ document.querySelector('#form-add-student button[type="submit"]').addEventListen
         
     };
 
+    const elementsWithError = formAddStudent.querySelectorAll('.has-error');
+    if (elementsWithError.length) {
+        elementsWithError.forEach(element => {
+            element.classList.remove('has-error');
+        })
+
+    }
+
+// ----------вариант проверки на пустое поле с вложенными ифами (некрасиво)----------------------------
+    // if (!data.firstname || !data.lastname) {
+    //     if (!data.firstname) {
+    //         formAddStudent.querySelector('[name="firstname"]').parentNode.classList.add('has-error')
+    //     }
+    
+    //     if (!data.lastname) {
+    //         formAddStudent.querySelector('[name="lastname"]').parentNode.classList.add('has-error')
+    //     }
+    // }
+// --------------------------------------
+    let hasError = false
+
+
+    if (!data.firstname) {
+        formAddStudent.querySelector('[name="firstname"]').parentNode.classList.add('has-error')
+        hasError = true;
+    }
+
+    if (!data.lastname) {
+        formAddStudent.querySelector('[name="lastname"]').parentNode.classList.add('has-error')
+        hasError = true;
+    }
+
+    if (hasError) return;
+
     api.createStudent(data).then(response => {
         const { name: id } = response;
 
         data.id = id;
         addStudent(data);
+
+        formAddStudent.reset();
     }).catch(error => {
         console.error(error);
     });
 });
+
+document.querySelector('#form-edit-student button[type="button"]').addEventListener('click', () => {
+    const id = document.querySelector('#form-edit-student [name="id"]').value;
+    if (!id) return;
+
+
+    console.log(id);
+    api.deleteStudent(id).then(() => {
+        document.querySelector(`#students-list [data-id="` + id +`"]`).remove();
+    }).catch(error => {
+        console.error(error);
+    });
+});;
+;
