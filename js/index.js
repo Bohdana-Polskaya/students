@@ -42,7 +42,7 @@ document.body.addEventListener('click', event => {
     });
 });
 
-document.querySelector('#form-edit-student button[type="submit"]').addEventListener('click', function(event) {
+document.querySelector('#form-edit-student button[type="submit"]').addEventListener('click', () => {
     const data = {
         'firstname': formEditStudent.elements.firstname.value,
         'lastname': formEditStudent.elements.lastname.value,
@@ -62,8 +62,28 @@ document.querySelector('#form-edit-student button[type="submit"]').addEventListe
         console.error(error)
     });
 
+   
+});
 
+document.querySelector('#form-add-student button[type="submit"]').addEventListener('click', function(event) {
+    const formAddStudent = document.querySelector('#form-add-student');
+    const { elements } = formAddStudent;
 
+    const data = {
+        firstname: elements.firstname.value,
+        lastname: elements.lastname.value,
+        email: elements.email.value,
+        git: elements.git.value,
+        info: elements.info.value,
+        
+    };
 
-    
+    api.createStudent(data).then(response => {
+        const { name: id } = response;
+
+        data.id = id;
+        addStudent(data);
+    }).catch(error => {
+        console.error(error);
+    });
 });

@@ -21,4 +21,17 @@ export default class API {
             body: JSON.stringify(data)
         }).then(result => result.json()) ;
     }
+
+    createStudent(data) {
+        return fetch(`${this.server}/api/v${this.version}/students/.json`, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        }).then(result => result.json()) ;
+    }
+
+    deleteStudent(id) {
+        return fetch(`${this.server}/api/v${this.version}/students/${id}.json`, {
+            method: 'DELETE'
+        }).then(result => result.json()) ;
+    }
 }
